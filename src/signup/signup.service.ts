@@ -6,6 +6,7 @@ import * as uuid from 'uuid';
 
 import { User } from '../entity/user.entity';
 import { UserClass } from '../user/user.service';
+import { CheckValidData } from './signup.check.valid.data';
 
 @Injectable()
 export class SignupService {
@@ -20,6 +21,9 @@ export class SignupService {
     userData.name = userData.name.trim();
     userData.email = userData.email.trim();
     userData.password = userData.password.trim();
+
+    const MessageFromCheckValidData = await CheckValidData(userData)
+    if (MessageFromCheckValidData != 'ok') return MessageFromCheckValidData;
 
     if (await userClass.CheckNameUserExist(userData)) {
       return "Данное имя уже занято"

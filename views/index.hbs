@@ -7,11 +7,17 @@
   </head>
   <body>
     <header>
-      <div>Книги</div>
-      <div id="login_btn">Войти</div>
-      <div id="signup_btn">Зарегистрироваться</div>
+      <div onclick="renderBooks()">Книги</div>
+      {{#if guest}}
+        <div onclick="renderLogin()">Войти</div>
+        <div onclick="renderSignup()">Зарегистрироваться</div>
+      {{/if}}
+      
+      {{#if user}}
+        <div onclick="renderProfile()">Профиль</div>
+      {{/if}}
     </header>
   
-     <script src="./ts/index.js"></script>
+     <script src="./js/index.js"></script>
   </body>
 </html> 

@@ -55,4 +55,12 @@ export class UserClass {
         if (exist) return {token: checkData.token}
         else return false
     } 
+
+    async GetUserData (token) {
+        const user = await this.userRepository.findOne(
+            { where: { token: token }}
+        );
+
+        return user;
+    }
 }

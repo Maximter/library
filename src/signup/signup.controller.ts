@@ -19,7 +19,7 @@ export class SignupController {
     if (answer != 'ok') {
       return res.render('signup', { error_message: answer });
     } else {
-      return res.render('login');
+      return res.redirect('/login');
     }
    
   }

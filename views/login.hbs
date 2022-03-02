@@ -12,8 +12,12 @@
       <button>Войти</button>
     </form>
 
-    <p>
-      {{error_message}}
-    </p>
+
+    {{#if error_message}}
+      <p>
+        {{error_message}}
+      </p>
+    {{/if}}
+   
   </body>
 </html> 
