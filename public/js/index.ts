@@ -1,5 +1,5 @@
 function renderBooks() : void{
-    window.location.href = '/books';
+    window.location.href = '/book';
 }
 
 function renderProfile() : void{

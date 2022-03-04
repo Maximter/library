@@ -5,7 +5,7 @@ import * as bcrypt from 'bcrypt';
 import * as uuid from 'uuid';
 
 import { User } from '../entity/user.entity';
-import { UserClass } from '../user/user.service';
+import { UserClass } from '../controllers/user.service';
 import { CheckValidData } from './signup.check.valid.data';
 
 @Injectable()
@@ -30,14 +30,15 @@ export class SignupService {
     } else if (await userClass.CheckEmailUserExist(userData)) {
       return "Данная почта принадлежит другому пользователю"
     } else {
-      const newUser = new User();
       const saltOrRounds = 7;
       const hashPassword = await bcrypt.hash(userData.password, saltOrRounds);
 
-      newUser.name = userData.name;
-      newUser.email = userData.email;
-      newUser.password = hashPassword;
-      newUser.token = await uuid.v4();
+      const newUser = this.userRepository.create({
+        name: userData.name,
+        email: userData.email,
+        password: hashPassword,
+        token: await uuid.v4()
+      }); 
 
       await newUser.save();
       return ('ok')

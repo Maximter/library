@@ -2,19 +2,19 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>SBook</title>
+    <title>RFLibrary</title>
     <link rel="stylesheet" type="text/css" href="./css/index.css"/>
   </head>
   <body>
     <header>
-      <div onclick="renderBooks()">Книги</div>
+      <div onclick="renderBooks()">Books</div>
       {{#if guest}}
-        <div onclick="renderLogin()">Войти</div>
-        <div onclick="renderSignup()">Зарегистрироваться</div>
+        <div onclick="renderLogin()">Login</div>
+        <div onclick="renderSignup()">Signup</div>
       {{/if}}
       
       {{#if user}}
-        <div onclick="renderProfile()">Профиль</div>
+        <div onclick="renderProfile()">Profile</div>
       {{/if}}
     </header>
   

@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
 import { User } from '../entity/user.entity';
-import { UserClass } from '../user/user.service';
+import { UserClass } from '../controllers/user.service';
 
 @Injectable()
 export class LoginService {
@@ -22,7 +22,7 @@ export class LoginService {
     let answer = await userClass.CheckLogInUserData(userData)
     let error_message = { error_message: "Введена неправильная почта или пароль"}
 
-    if (answer == false) return error_message
+    if (!answer) return error_message
     else return answer;
   } 
 }
