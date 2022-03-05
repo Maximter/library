@@ -3,15 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <title>RFLibrary</title>
-    {{!-- <link rel="stylesheet" type="text/css" href="./css/index.css"/> --}}
+    <link rel="icon" href="./img/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="./css/index.css"/>
   </head>
   <body>
+    <button onclick="window.location.href = '/'">Back</button>
     <form method="post">
       <input name="email" type="email" placeholder="Email" required>
       <input name="password" type="password" placeholder="Password" required>
       <button>Login</button>
     </form>
 
+    <button onclick="window.location.href = '/signup'">Signup if you are here in the first time</button>
 
     {{#if error_message}}
       <p>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>RFLibrary</title>
+    <link rel="icon" href="./img/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../css/index.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/profile.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/books.css"/>
+  </head>
+  <body>
+    <header>
+        RFLibrary
+    </header>
+
+    <content>
+        <h4>Search</h4>
+        <div class="importantBlock">
+          <ul class="ulPostedBooks">
+          {{#each foundBooks}}
+            <li id_book = "{{this.id_book}}" class="bookBlock">
+              <img src="../img/book-cover.jpg" class="bookCover" alt="Book Title" title="Book title">
+              <div class="bookInfo">
+                <p><b>Book name: </b>{{this.name_book}}</p>
+                <p><b>Genre: </b>{{this.genre}}</p>
+                <p><b>Author: </b>{{this.name_author}}</p>
+                <p style="display: flex;"><b>Read:</b>{{this.read}}<img class = "readImg" src="../img/read.svg" alt="Read" title="Read"></p>
+                <a href="/book/:{{this.id_book}}"><button>Read</button></a>
+              </div>
+          </li>
+          {{else}}
+          <li style="margin: 10px;">We didn't find anything on your request.</li>
+          {{/each}}
+          </ul>
+        </div>
+
+         <button class="moreButton" onclick="window.location.href = '/book'">Go back</button>
+
+    </content>
+
+    
+  </body>
+</html> 

@@ -5,7 +5,7 @@ import * as bcrypt from 'bcrypt';
 import * as uuid from 'uuid';
 
 import { User } from '../entity/user.entity';
-import { UserClass } from '../controllers/user.service';
+import { UserClass } from '../service/user.service';
 import { CheckValidData } from './signup.check.valid.data';
 
 @Injectable()

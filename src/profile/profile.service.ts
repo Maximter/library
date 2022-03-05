@@ -5,6 +5,7 @@ import * as fs from 'fs';
 
 import { User } from '../entity/user.entity';
 import { Book } from '../entity/book.entity';
+import { UserReading } from 'src/entity/user.reading.entity';
 
 @Injectable()
 export class ProfileService {
@@ -13,7 +14,10 @@ export class ProfileService {
     private userRepository: Repository<User>,
 
     @InjectRepository(Book) 
-    private bookRepository: Repository<Book>
+    private bookRepository: Repository<Book>,
+
+    @InjectRepository(UserReading) 
+    private userReadingRepository: Repository<UserReading>
   ) {}
  
   async getUserData (token : string) {
@@ -42,6 +46,23 @@ export class ProfileService {
     }
 
     return needDataAboutBook;
+  }
+
+  async getUserReadingBooks (id : number) : Promise<object[]> {
+    const idReadingBooks = await this.userReadingRepository.find(
+      { where: { id_user : id }}
+    );   
+
+    let readingBooks : object[] = []
+
+    for (let i = 0; i < idReadingBooks.length; i++) {
+      const bookData = await this.bookRepository.findOne(
+        { where: { id_book : idReadingBooks[i].id_book }}
+      );
+      readingBooks.push(bookData)
+    }
+
+    return readingBooks;
   }
 
   async createIdBookAndRename (multerBookName : string ) : Promise<number> {

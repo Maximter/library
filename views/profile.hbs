@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <title>RFLibrary</title>
+    <link rel="icon" href="./img/favicon.ico">
     <link rel="stylesheet" type="text/css" href="./css/index.css"/>
     <link rel="stylesheet" type="text/css" href="./css/profile.css"/>
   </head>
@@ -10,15 +11,30 @@
     <header>
       <h3>Profile {{userName}}</h3>
     </header>
+    <button onclick="window.location.href = '/'">Back</button>
     <button onclick="deleteTokenAndExit()">Logout</button>
 
     <content> 
-      <div> 
-        <h5>Reading books:</h5>
-        <ul>
-          <li>BOOK</li>
-          <li>BOOK</li>
-          <li>BOOK</li>
+      <div class="importantBlock">
+        <h4>Reading books:</h4>
+        <ul class="ulPostedBooks">
+            {{#each readingBooks}}
+              <li id_book = "{{this.id_book}}" class="bookBlock">
+                  <img src="./img/book-cover.jpg" class="bookCover" alt="Book Title" title="Book title">
+                  <div class="bookInfo">
+                    <p><b>Book name: </b>{{this.name_book}}</p>
+                    <p><b>Genre: </b>{{this.genre}}</p>
+                    <p><b>Author: </b>{{this.name_author}}</p>
+                    <a href="/book/:{{this.id_book}}"><button>Read</button></a>
+
+                    <form method="post" action="book/:{{this.id_book}}">
+                      <button style="margin-top: 6px;">Done</button>
+                    </form>
+                  </div>
+              </li>
+            {{else}}
+              <li style="margin-bottom: 10px;">You haven't read any book yet. <a href="/book">Time to start!</a></li>
+            {{/each}}
         </ul>
       </div>
 
@@ -31,7 +47,7 @@
                   <div class="bookInfo">
                     <p><b>Book name: </b>{{this.book_name}}</p>
                     <p><b>Genre: </b>{{this.genre}}</p>
-                    <p><b>Read: </b>{{this.read}}</p>
+                    <p style="display: flex;"><b>Read:</b>{{this.read}}<img class = "readImg" src="./img/read.svg" alt="Read" title="Read"></p>
                     <p><b>Status: </b>{{this.status}}</p>
                     <a href="/book/:{{this.id_book}}"><button>Read</button></a>
                   </div>
@@ -42,54 +58,53 @@
         </ul>
       </div>
 
+      <div class="importantBlock">
 
-      
-        <div class="importantBlock">
+        <h4>Post new book</h4>
+        <form class="formPostBook" method="post" enctype="multipart/form-data">
+          
+          <p>Book name:</p>
+          <input name="bookName" type="text" placeholder="Book name" autocomplete="off" required>
+            <p>Author name:</p>
+          <input name="authorName" type="text" placeholder="Author name" autocomplete="off" required>
+          
+          <p>Choose genre:</p>
+          <p> <select name="genre" size="5" required>
+              <option>Business literature</option>
+              <option>Detectives and Thrillers</option>
+              <option>Nonfiction</option>
+              <option>Home, crafts, leisure, hobbies</option>
+              <option>Dramaturgy</option>
+              <option>Art, Art History, Design</option>
+              <option>Computers and the Internet</option>
+              <option>Literature for children</option>
+              <option>Romance novels</option>
+              <option>Science, Education</option>
+              <option>Poetry</option>
+              <option>Adventures</option>
+              <option>Prose</option>
+              <option>Religion, spirituality, esotericism</option>
+              <option>Reference literature</option>
+              <option>Vintage</option>
+              <option>Technic</option>
+              <option>Textbooks and manuals</option>
+              <option>Fantasy</option>
+              <option>Folklore</option>
+              <option>Humor</option>
+              <option>Health, beauty, psychology</option>
+              <option>Epic</option>
+              <option>Other</option>
+          </select> </p>
 
-          <h4>Post new book</h4>
-          <form class="formPostBook" method="post" enctype="multipart/form-data">
-           
-            <p>Book name:</p>
-            <input name="bookName" type="text" placeholder="Book name" autocomplete="off" required>
-             <p>Author name:</p>
-            <input name="authorName" type="text" placeholder="Author name" autocomplete="off" required>
-            
-            <p>Choose genre:</p>
-            <p> <select name="genre" size="5" required>
-                <option>Business literature</option>
-                <option>Detectives and Thrillers</option>
-                <option>Nonfiction</option>
-                <option>Home, crafts, leisure, hobbies</option>
-                <option>Dramaturgy</option>
-                <option>Art, Art History, Design</option>
-                <option>Computers and the Internet</option>
-                <option>Literature for children</option>
-                <option>Romance novels</option>
-                <option>Science, Education</option>
-                <option>Poetry</option>
-                <option>Adventures</option>
-                <option>Prose</option>
-                <option>Religion, spirituality, esotericism</option>
-                <option>Reference literature</option>
-                <option>Vintage</option>
-                <option>Technic</option>
-                <option>Textbooks and manuals</option>
-                <option>Fantasy</option>
-                <option>Folklore</option>
-                <option>Humor</option>
-                <option>Health, beauty, psychology</option>
-                <option>Other</option>
-            </select> </p>
+          <p>Load your book in .pdf format:</p>
+          <input name="book" type="file" accept=".pdf" required id="afile">
+          <button>Post book</button>
+        </form>
 
-            <p>Load your book in .pdf format:</p>
-            <input name="book" type="file" accept=".pdf" required id="afile">
-            <button>Post book</button>
-          </form>
-
-          {{#if book_error_message}}
-            <p>{{book_error_message}}</p>
-          {{/if}}
-        </div>
+        {{#if book_error_message}}
+          <p>{{book_error_message}}</p>
+        {{/if}}
+      </div>
     </content>
 
    

@@ -3,30 +3,95 @@
   <head>
     <meta charset="utf-8" />
     <title>RFLibrary</title>
+    <link rel="icon" href="./img/favicon.ico">
     <link rel="stylesheet" type="text/css" href="./css/index.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/profile.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/books.css"/>
   </head>
   <body>
     <header>
         RFLibrary
     </header>
+    <button onclick="window.location.href = '/'">Back</button>
 
     <content>
-      <ul>
-        {{#each books}}
+      <h4>Search</h4>
+      <div class="importantBlock">
+        <form method="post" action="/book/search">
+          <p>Search by:  <select name="whereFind" required>
+                <option>Author</option>
+                <option>Book's name</option>
+                <option>ID's book</option>
+                <option>Genre</option>
+          </select></p>
+          <br>
+          <input type="text" name="searchWord" autocomplete="off" placeholder="Search..." required>
+          <button>Search</button>
+        </form>
+      </div>
+
+      <h4>Most Popular books</h4>
+      <div class="importantBlock">
+      <ul class="ulPostedBooks">
+        {{#each books.mostPopularBooks}}
           <li id_book = "{{this.id_book}}" class="bookBlock">
               <img src="./img/book-cover.jpg" class="bookCover" alt="Book Title" title="Book title">
               <div class="bookInfo">
-                <p><b>Book name: </b>{{this.book_name}}</p>
+                <p><b>Book name: </b>{{this.name_book}}</p>
                 <p><b>Genre: </b>{{this.genre}}</p>
-                <p><b>Read: </b>{{this.read}}</p>
-                <p><b>Status: </b>{{this.status}}</p>
+                <p><b>Author: </b>{{this.name_author}}</p>
+                <p style="display: flex;"><b>Read:</b>{{this.read}}<img class = "readImg" src="./img/read.svg" alt="Read" title="Read"></p>
                 <a href="/book/:{{this.id_book}}"><button>Read</button></a>
               </div>
           </li>
         {{else}}
-          <li style="margin-bottom: 10px;">We haven't any book yet</li>
+          <li style="margin: 10px;">We haven't any book yet</li>
         {{/each}}
       </ul>
+      </div>
+
+      <h4>The newest books</h4>
+      <div class="importantBlock">
+      <ul class="ulPostedBooks">
+        {{#each books.theNewestBooks}}
+          <li id_book = "{{this.id_book}}" class="bookBlock">
+              <img src="./img/book-cover.jpg" class="bookCover" alt="Book Title" title="Book title">
+              <div class="bookInfo">
+                <p><b>Book name: </b>{{this.name_book}}</p>
+                <p><b>Genre: </b>{{this.genre}}</p>
+                <p><b>Author: </b>{{this.name_author}}</p>
+                <p style="display: flex;"><b>Read:</b>{{this.read}}<img class = "readImg" src="./img/read.svg" alt="Read" title="Read"></p>
+                <a href="/book/:{{this.id_book}}"><button>Read</button></a>
+              </div>
+          </li>
+        {{else}}
+          <li style="margin: 10px;">We haven't any book yet</li>
+        {{/each}}
+      </ul>
+      </div>
+
+
+      <h4>Random books</h4>
+      <div class="importantBlock">
+      <ul class="ulPostedBooks">
+        {{#each books.randomBooks}}
+          <li id_book = "{{this.id_book}}" class="bookBlock">
+              <img src="./img/book-cover.jpg" class="bookCover" alt="Book Title" title="Book title">
+              <div class="bookInfo">
+                <p><b>Book name: </b>{{this.name_book}}</p>
+                <p><b>Genre: </b>{{this.genre}}</p>
+                <p><b>Author: </b>{{this.name_author}}</p>
+                <p style="display: flex;"><b>Read:</b>{{this.read}}<img class = "readImg" src="./img/read.svg" alt="Read" title="Read"></p>
+                <a href="/book/:{{this.id_book}}"><button>Read</button></a>
+              </div>
+          </li>
+        {{else}}
+          <li style="margin: 10px;">We haven't any book yet</li>
+        {{/each}}
+      </ul>
+      </div>
+
+      <button class="moreButton" onclick="window.location.href = '/book/catalog'">Looking for more books...</button>
     </content>
   </body>
 </html> 

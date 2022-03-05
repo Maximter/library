@@ -3,7 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <title>RFLibrary</title>
+    <link rel="icon" href="./img/favicon.ico">
     <link rel="stylesheet" type="text/css" href="./css/index.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/profile.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/books.css"/>
   </head>
   <body>
     <header>
@@ -17,7 +20,94 @@
         <div onclick="renderProfile()">Profile</div>
       {{/if}}
     </header>
-  
+
+    <content>
+      {{#if user}}
+      <div class="importantBlock">
+        <h4>Reading books:</h4>
+        <ul class="ulPostedBooks">
+            {{#each readingBooks}}
+              <li id_book = "{{this.id_book}}" class="bookBlock">
+                  <img src="./img/book-cover.jpg" class="bookCover" alt="Book Title" title="Book title">
+                  <div class="bookInfo">
+                    <p><b>Book name: </b>{{this.name_book}}</p>
+                    <p><b>Genre: </b>{{this.genre}}</p>
+                    <p><b>Author: </b>{{this.name_author}}</p>
+                    <a href="/book/:{{this.id_book}}"><button>Read</button></a>
+
+                    <form method="post" action="book/:{{this.id_book}}" style="padding: 0;">
+                      <button style="margin-top: 6px;">Done</button>
+                    </form>
+                  </div>
+              </li>
+            {{else}}
+              <li style="margin-bottom: 10px;">You haven't read any book yet. <a href="/book">Time to start!</a></li>
+            {{/each}}
+        </ul>
+      </div>
+    {{/if}}
+
+
+    
+      <h4>Most Popular books</h4>
+      <div class="importantBlock">
+      <ul class="ulPostedBooks">
+        {{#each books.mostPopularBooks}}
+          <li id_book = "{{this.id_book}}" class="bookBlock">
+              <img src="./img/book-cover.jpg" class="bookCover" alt="Book Title" title="Book title">
+              <div class="bookInfo">
+                <p><b>Book name: </b>{{this.name_book}}</p>
+                <p><b>Genre: </b>{{this.genre}}</p>
+                <p style="display: flex;"><b>Read:</b>{{this.read}}<img class = "readImg" src="./img/read.svg" alt="Read" title="Read"></p>
+                <a href="/book/:{{this.id_book}}"><button>Read</button></a>
+              </div>
+          </li>
+        {{else}}
+          <li style="margin: 10px;">We haven't any book yet</li>
+        {{/each}}
+      </ul>
+      </div>
+
+      <h4>The newest books</h4>
+      <div class="importantBlock">
+      <ul class="ulPostedBooks">
+        {{#each books.theNewestBooks}}
+          <li id_book = "{{this.id_book}}" class="bookBlock">
+              <img src="./img/book-cover.jpg" class="bookCover" alt="Book Title" title="Book title">
+              <div class="bookInfo">
+                <p><b>Book name: </b>{{this.name_book}}</p>
+                <p><b>Genre: </b>{{this.genre}}</p>
+                <p style="display: flex;"><b>Read:</b>{{this.read}}<img class = "readImg" src="./img/read.svg" alt="Read" title="Read"></p>
+                <a href="/book/:{{this.id_book}}"><button>Read</button></a>
+              </div>
+          </li>
+        {{else}}
+          <li style="margin: 10px;">We haven't any book yet</li>
+        {{/each}}
+      </ul>
+      </div>
+
+
+      <h4>Random books</h4>
+      <div class="importantBlock">
+      <ul class="ulPostedBooks">
+        {{#each books.randomBooks}}
+          <li id_book = "{{this.id_book}}" class="bookBlock">
+              <img src="./img/book-cover.jpg" class="bookCover" alt="Book Title" title="Book title">
+              <div class="bookInfo">
+                <p><b>Book name: </b>{{this.name_book}}</p>
+                <p><b>Genre: </b>{{this.genre}}</p>
+                <p style="display: flex;"><b>Read:</b>{{this.read}}<img class = "readImg" src="./img/read.svg" alt="Read" title="Read"></p>
+                <a href="/book/:{{this.id_book}}"><button>Read</button></a>
+              </div>
+          </li>
+        {{else}}
+          <li style="margin: 10px;">We haven't any book yet</li>
+        {{/each}}
+      </ul>
+      </div>
+
+    </content>
      <script src="./js/index.js"></script>
   </body>
 </html> 

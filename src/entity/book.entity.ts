@@ -14,7 +14,7 @@ export class Book extends BaseEntity {
   @Column()
   name_author: string;
 
-  @Column()
+  @Column({ length: 60 })
   name_book: string; 
 
   @Column()

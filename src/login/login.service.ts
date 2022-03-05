@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
 import { User } from '../entity/user.entity';
-import { UserClass } from '../controllers/user.service';
+import { UserClass } from '../service/user.service';
 
 @Injectable()
 export class LoginService {
