@@ -6,7 +6,7 @@ import { ProfileService } from './profile.service';
 import { AppService } from '../app.service';
 import { User } from '../entity/user.entity';
 import { Book } from '../entity/book.entity';
-import { CheckAuth } from '../middleware/check.auth'
+import { CheckAuth } from '../middleware/check.auth';
 import { UserReading } from 'src/entity/user.reading.entity';
 
 @Module({
@@ -14,12 +14,8 @@ import { UserReading } from 'src/entity/user.reading.entity';
   controllers: [ProfileController],
   providers: [ProfileService, AppService],
 })
-
 export class ProfileModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(CheckAuth)
-      .forRoutes('profile');
+    consumer.apply(CheckAuth).forRoutes('profile');
   }
 }
- 

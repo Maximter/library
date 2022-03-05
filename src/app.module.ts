@@ -12,11 +12,18 @@ import { Book } from './entity/book.entity';
 import { BookModule } from './book/book.module';
 import { AdminModule } from './admin/admin.module';
 import { UserReading } from './entity/user.reading.entity';
- 
+
 @Module({
-  imports: [TypeOrmModule.forRoot(), TypeOrmModule.forFeature([User, Book, UserReading]), 
-            SignupModule, LoginModule, ProfileModule, BookModule, AdminModule],
+  imports: [
+    TypeOrmModule.forRoot(),
+    TypeOrmModule.forFeature([User, Book, UserReading]),
+    SignupModule,
+    LoginModule,
+    ProfileModule,
+    BookModule,
+    AdminModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
-}) 
+})
 export class AppModule {}

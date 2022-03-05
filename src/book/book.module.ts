@@ -11,6 +11,5 @@ import { User } from 'src/entity/user.entity';
   imports: [TypeOrmModule.forFeature([User, Book, UserReading])],
   controllers: [BookController],
   providers: [BookService],
- 
 })
 export class BookModule {}

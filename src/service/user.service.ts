@@ -4,63 +4,56 @@ import { User } from '../entity/user.entity';
 import * as bcrypt from 'bcrypt';
 
 export class UserClass {
-    constructor(
-        @InjectRepository(User) 
-        private userRepository: Repository<User>
-      ) {}
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+  ) {}
 
-    async CheckNameUserExist (userData) {
-        let name : string = userData.name;
-        let exist : boolean;
+  async CheckNameUserExist(userData) {
+    let name: string = userData.name;
+    let exist: boolean;
 
-        const checkName = await this.userRepository.findOne(
-            { where: { name: name }}
-        );
+    const checkName = await this.userRepository.findOne({
+      where: { name: name },
+    });
 
-        checkName  ?
-            exist = true :
-            exist = false;
+    checkName ? (exist = true) : (exist = false);
 
-       return exist;
-    }
+    return exist;
+  }
 
-    async CheckEmailUserExist (userData) {
-        let email : string = userData.email;
-        let exist : boolean;
+  async CheckEmailUserExist(userData) {
+    let email: string = userData.email;
+    let exist: boolean;
 
-        const checkEmail = await this.userRepository.findOne(
-            { where: { email: email }}
-        );
-    
-        checkEmail ?
-            exist = true :
-            exist = false;
+    const checkEmail = await this.userRepository.findOne({
+      where: { email: email },
+    });
 
-       return exist;
-    }
+    checkEmail ? (exist = true) : (exist = false);
 
-    async CheckLogInUserData (userData) {
-        let exist : boolean;
+    return exist;
+  }
 
-        const checkData = await this.userRepository.findOne(
-            { where: { email : userData.email }}
-        );
+  async CheckLogInUserData(userData) {
+    let exist: boolean;
 
-        checkData ?
-            exist = true :
-            exist = false;
+    const checkData = await this.userRepository.findOne({
+      where: { email: userData.email },
+    });
 
-        if (exist && !await bcrypt.compare(userData.password, checkData.password)) exist = false; 
-        
-        if (exist) return {token: checkData.token}
-        else return false
-    } 
+    checkData ? (exist = true) : (exist = false);
 
-    async GetUserData (token) {
-        const user = await this.userRepository.findOne(
-            { where: { token: token }}
-        );
+    if (exist && !(await bcrypt.compare(userData.password, checkData.password)))
+      exist = false;
 
-        return user;
-    }
+    if (exist) return { token: checkData.token };
+    else return false;
+  }
+
+  async GetUserData(token) {
+    const user = await this.userRepository.findOne({ where: { token: token } });
+
+    return user;
+  }
 }

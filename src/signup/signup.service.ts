@@ -11,24 +11,24 @@ import { CheckValidData } from './signup.check.valid.data';
 @Injectable()
 export class SignupService {
   constructor(
-    @InjectRepository(User) 
-    private userRepository: Repository<User>
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
-  async SignupServiceUser(userData) : Promise<string> {
+  async SignupServiceUser(userData): Promise<string> {
     const userClass = await new UserClass(this.userRepository);
 
     userData.name = userData.name.trim();
     userData.email = userData.email.trim();
     userData.password = userData.password.trim();
 
-    const MessageFromCheckValidData = await CheckValidData(userData)
+    const MessageFromCheckValidData = await CheckValidData(userData);
     if (MessageFromCheckValidData != 'ok') return MessageFromCheckValidData;
 
     if (await userClass.CheckNameUserExist(userData)) {
-      return "Данное имя уже занято"
+      return 'Данное имя уже занято';
     } else if (await userClass.CheckEmailUserExist(userData)) {
-      return "Данная почта принадлежит другому пользователю"
+      return 'Данная почта принадлежит другому пользователю';
     } else {
       const saltOrRounds = 7;
       const hashPassword = await bcrypt.hash(userData.password, saltOrRounds);
@@ -37,15 +37,11 @@ export class SignupService {
         name: userData.name,
         email: userData.email,
         password: hashPassword,
-        token: await uuid.v4()
-      }); 
+        token: await uuid.v4(),
+      });
 
       await newUser.save();
-      return ('ok')
-    };
-
-
-      
+      return 'ok';
+    }
   }
 }
-

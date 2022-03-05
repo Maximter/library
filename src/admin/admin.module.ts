@@ -7,8 +7,8 @@ import { Admin } from '../entity/admin.entity';
 import { Book } from '../entity/book.entity';
 
 @Module({
-  imports : [TypeOrmModule.forFeature([Admin, Book])],
+  imports: [TypeOrmModule.forFeature([Admin, Book])],
   controllers: [AdminController],
-  providers: [AdminService]
+  providers: [AdminService],
 })
 export class AdminModule {}

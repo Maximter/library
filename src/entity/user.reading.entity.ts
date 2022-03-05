@@ -7,8 +7,7 @@ export class UserReading extends BaseEntity {
 
   @Column()
   id_user: number;
- 
+
   @Column()
   id_book: number;
 }
-  

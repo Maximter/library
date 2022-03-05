@@ -10,73 +10,74 @@ import { UserReading } from 'src/entity/user.reading.entity';
 @Injectable()
 export class ProfileService {
   constructor(
-    @InjectRepository(User) 
+    @InjectRepository(User)
     private userRepository: Repository<User>,
 
-    @InjectRepository(Book) 
+    @InjectRepository(Book)
     private bookRepository: Repository<Book>,
 
-    @InjectRepository(UserReading) 
-    private userReadingRepository: Repository<UserReading>
+    @InjectRepository(UserReading)
+    private userReadingRepository: Repository<UserReading>,
   ) {}
- 
-  async getUserData (token : string) {
-    const user = await this.userRepository.findOne(
-      { where: { token: token }}
-    );
+
+  async getUserData(token: string) {
+    const user = await this.userRepository.findOne({ where: { token: token } });
 
     return user;
   }
 
-  async getUserPostedBooks (id : number) : Promise<object[]> {
-    const postedBooks = await this.bookRepository.find(
-      { where: { id_author: id }}
-    );
+  async getUserPostedBooks(id: number): Promise<object[]> {
+    const postedBooks = await this.bookRepository.find({
+      where: { id_author: id },
+    });
 
-    let needDataAboutBook : object[] = [];
+    let needDataAboutBook: object[] = [];
 
     for (let i = 0; i < postedBooks.length; i++) {
       needDataAboutBook.push({
-        id_book : postedBooks[i].id_book,
-        book_name : postedBooks[i].name_book,
-        genre : postedBooks[i].genre,
-        read : postedBooks[i].read,
-        status : postedBooks[i].status
-      })
+        id_book: postedBooks[i].id_book,
+        book_name: postedBooks[i].name_book,
+        genre: postedBooks[i].genre,
+        read: postedBooks[i].read,
+        status: postedBooks[i].status,
+      });
     }
 
     return needDataAboutBook;
   }
 
-  async getUserReadingBooks (id : number) : Promise<object[]> {
-    const idReadingBooks = await this.userReadingRepository.find(
-      { where: { id_user : id }}
-    );   
+  async getUserReadingBooks(id: number): Promise<object[]> {
+    const idReadingBooks = await this.userReadingRepository.find({
+      where: { id_user: id },
+    });
 
-    let readingBooks : object[] = []
+    let readingBooks: object[] = [];
 
     for (let i = 0; i < idReadingBooks.length; i++) {
-      const bookData = await this.bookRepository.findOne(
-        { where: { id_book : idReadingBooks[i].id_book }}
-      );
-      readingBooks.push(bookData)
+      const bookData = await this.bookRepository.findOne({
+        where: { id_book: idReadingBooks[i].id_book },
+      });
+      readingBooks.push(bookData);
     }
 
     return readingBooks;
   }
 
-  async createIdBookAndRename (multerBookName : string ) : Promise<number> {
-    const id : number = Math.round( Math.random() * 100000000 );
+  async createIdBookAndRename(multerBookName: string): Promise<number> {
+    const id: number = Math.round(Math.random() * 100000000);
 
-    await fs.rename(`public/books/rowBook/${multerBookName}`, 
-                    `public/books/${id}.pdf`, function(err) {
-        if ( err ) console.error('ERROR: ' + err);
-    });
+    await fs.rename(
+      `public/books/rowBook/${multerBookName}`,
+      `public/books/${id}.pdf`,
+      function (err) {
+        if (err) console.error('ERROR: ' + err);
+      },
+    );
 
     return id;
   }
 
-  async saveBookInDB (bookData) : Promise<void> {
+  async saveBookInDB(bookData): Promise<void> {
     const newBook = this.bookRepository.create({
       id_book: bookData.id_book,
       id_author: bookData.id_user,
@@ -84,9 +85,8 @@ export class ProfileService {
       name_author: bookData.name_author,
       genre: bookData.genre,
       status: 'Checking...',
-  }); 
+    });
 
     await newBook.save();
   }
 }
-

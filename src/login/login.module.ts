@@ -12,4 +12,3 @@ import { Admin } from '../entity/admin.entity';
   providers: [LoginService],
 })
 export class LoginModule {}
- 

@@ -11,56 +11,51 @@ import { UserReading } from './entity/user.reading.entity';
 @Injectable()
 export class AppService {
   constructor(
-    @InjectRepository(User) 
+    @InjectRepository(User)
     private userRepository: Repository<User>,
 
-    @InjectRepository(Book) 
+    @InjectRepository(Book)
     private bookRepository: Repository<Book>,
 
-    @InjectRepository(UserReading) 
-    private userReadingRepository: Repository<UserReading>
+    @InjectRepository(UserReading)
+    private userReadingRepository: Repository<UserReading>,
   ) {}
 
   async checkValidToken(token) {
-    let exist : boolean
+    let exist: boolean;
 
-    const checkData = await this.userRepository.findOne(
-      { where: { token : token }}
-    );
+    const checkData = await this.userRepository.findOne({
+      where: { token: token },
+    });
 
-    checkData ?
-      exist = true : 
-      exist = false
+    checkData ? (exist = true) : (exist = false);
 
-    return exist
-  } 
+    return exist;
+  }
 
-  async getDifferentTypesOfBooks () {
+  async getDifferentTypesOfBooks() {
     const bookClass = new BookClass(this.bookRepository);
     const books = await bookClass.getDifferentTypesOfBooks();
 
     return books;
   }
 
-  async getUserReadingBooks (token : number) : Promise<object[]> {
-    const user = await this.userRepository.findOne(
-      { where: { token : token }}
-    );   
-    
-    const idReadingBooks = await this.userReadingRepository.find(
-      { where: { id_user : user.id_user }}
-    );  
+  async getUserReadingBooks(token: number): Promise<object[]> {
+    const user = await this.userRepository.findOne({ where: { token: token } });
 
-    let readingBooks : object[] = []
+    const idReadingBooks = await this.userReadingRepository.find({
+      where: { id_user: user.id_user },
+    });
+
+    let readingBooks: object[] = [];
 
     for (let i = 0; i < idReadingBooks.length; i++) {
-      const bookData = await this.bookRepository.findOne(
-        { where: { id_book : idReadingBooks[i].id_book }}
-      );
-      readingBooks.push(bookData)
+      const bookData = await this.bookRepository.findOne({
+        where: { id_book: idReadingBooks[i].id_book },
+      });
+      readingBooks.push(bookData);
     }
-    
+
     return readingBooks;
   }
 }
- 

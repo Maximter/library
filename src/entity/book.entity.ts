@@ -3,9 +3,9 @@ import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
 @Entity()
 export class Book extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id : number;
-  
-  @Column({unique: true})
+  id: number;
+
+  @Column({ unique: true })
   id_book: number;
 
   @Column()
@@ -15,15 +15,14 @@ export class Book extends BaseEntity {
   name_author: string;
 
   @Column({ length: 60 })
-  name_book: string; 
+  name_book: string;
 
   @Column()
   genre: string;
 
   @Column({ default: 0 })
   read: number;
- 
+
   @Column()
   status: string;
 }
-  
