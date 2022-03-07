@@ -26,9 +26,9 @@ export class ProfileService {
     return user;
   }
 
-  async getUserPostedBooks(id: number): Promise<object[]> {
+  async getUserPostedBooks(user: User): Promise<object[]> {
     const postedBooks = await this.bookRepository.find({
-      where: { id_author: id },
+      where: { id_author: user.id_user },
     });
 
     let needDataAboutBook: object[] = [];
@@ -46,9 +46,9 @@ export class ProfileService {
     return needDataAboutBook;
   }
 
-  async getUserReadingBooks(id: number): Promise<object[]> {
+  async getUserReadingBooks(user: User): Promise<object[]> {
     const idReadingBooks = await this.userReadingRepository.find({
-      where: { id_user: id },
+      where: { user: user },
     });
 
     let readingBooks: object[] = [];

@@ -53,13 +53,13 @@ export class BookService {
     const user = await this.userRepository.findOne({ where: { token: token } });
 
     const existReadingBook = await this.userReadingRepository.findOne({
-      where: { id_user: user.id_user, id_book: id_book },
+      where: { user: user, id_book: id_book },
     });
 
     if (existReadingBook) return 0;
 
     const newReadingBook = await this.userReadingRepository.create({
-      id_user: user.id_user,
+      user: user,
       id_book: id_book,
     });
 
@@ -73,7 +73,7 @@ export class BookService {
     const user = await this.userRepository.findOne({ where: { token: token } });
 
     const existReadingBook = await this.userReadingRepository.findOne({
-      where: { id_user: user.id_user, id_book: id_book },
+      where: { user: user, id_book: id_book },
     });
 
     if (!existReadingBook) return 0;

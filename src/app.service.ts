@@ -44,7 +44,7 @@ export class AppService {
     const user = await this.userRepository.findOne({ where: { token: token } });
 
     const idReadingBooks = await this.userReadingRepository.find({
-      where: { id_user: user.id_user },
+      where: { user: user },
     });
 
     let readingBooks: object[] = [];
