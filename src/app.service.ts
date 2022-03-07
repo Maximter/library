@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, getRepository } from 'typeorm';
 
 import { BookClass } from './service/book.service';
 
@@ -42,19 +42,21 @@ export class AppService {
 
   async getUserReadingBooks(token: number): Promise<object[]> {
     const user = await this.userRepository.findOne({ where: { token: token } });
-
     const idReadingBooks = await this.userReadingRepository.find({
       where: { user: user },
     });
 
-    let readingBooks: object[] = [];
+    if (idReadingBooks.length == 0) return [];
 
-    for (let i = 0; i < idReadingBooks.length; i++) {
-      const bookData = await this.bookRepository.findOne({
-        where: { id_book: idReadingBooks[i].id_book },
-      });
-      readingBooks.push(bookData);
-    }
+    let id: number[] = [];
+
+    for (let i = 0; i < idReadingBooks.length; i++)
+      id.push(idReadingBooks[i].id_book);
+
+    const readingBooks = await getRepository(Book)
+      .createQueryBuilder('book')
+      .where('book.id_book IN (:...id)', { id: id })
+      .getMany();
 
     return readingBooks;
   }

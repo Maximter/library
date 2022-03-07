@@ -17,16 +17,10 @@ export class ProfileController {
 
   @Get()
   async renderPage(@Req() req, @Res() res: Response) {
-    const user = await this.profileService.getUserData(
-      req.cookies['token'],
-    );
+    const user = await this.profileService.getUserData(req.cookies['token']);
     if (!user.name) return res.redirect('/');
-    const postedBooks = await this.profileService.getUserPostedBooks(
-      user
-    );
-    const readingBooks = await this.profileService.getUserReadingBooks(
-      user,
-    );
+    const postedBooks = await this.profileService.getUserPostedBooks(user);
+    const readingBooks = await this.profileService.getUserReadingBooks(user);
 
     return res.render('profile', {
       userName: user.name,

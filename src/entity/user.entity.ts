@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  BaseEntity,
+  OneToMany,
+} from 'typeorm';
 import { UserReading } from './user.reading.entity';
 
 @Entity()
@@ -18,6 +24,6 @@ export class User extends BaseEntity {
   @Column({ unique: true, length: 40 })
   token: string;
 
-  @OneToMany(() => UserReading, reading => reading.user)
+  @OneToMany(() => UserReading, (reading) => reading.user)
   userReading: UserReading[];
 }
