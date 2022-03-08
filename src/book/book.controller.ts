@@ -43,7 +43,7 @@ export class BookController {
   @Post(':id')
   async deleteBook(@Param() params, @Req() req, @Res() res: Response) {
     params.id = params.id.slice(1);
-    await this.bookService.deleteBook(params.id, req.cookies['token']);
-    return res.redirect('/');
+    await this.bookService.deleteBook(params.id, req.cookies['token']);    
+    return res.redirect(req.headers.referer);
   }
 }

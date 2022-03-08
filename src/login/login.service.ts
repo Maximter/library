@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Token } from 'src/entity/token.entity';
 import { Repository } from 'typeorm';
 
 import { User } from '../entity/user.entity';
@@ -10,15 +11,18 @@ export class LoginService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+
+    @InjectRepository(Token)
+    private tokenRepository: Repository<Token>,
   ) {}
 
-  async loginUser(userData) {
-    const userClass = await new UserClass(this.userRepository);
+  userClass = new UserClass(this.userRepository, this.tokenRepository);
 
+  async loginUser(userData) {
     userData.email = userData.email.trim();
     userData.password = userData.password.trim();
 
-    let answer = await userClass.CheckLogInUserData(userData);
+    let answer = await this.userClass.CheckLogInUserData(userData);
     let error_message = {
       error_message: 'Введена неправильная почта или пароль',
     };

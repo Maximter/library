@@ -5,6 +5,7 @@ import {
   BaseEntity,
   OneToMany,
 } from 'typeorm';
+import { Token } from './token.entity';
 import { UserReading } from './user.reading.entity';
 
 @Entity()
@@ -20,9 +21,6 @@ export class User extends BaseEntity {
 
   @Column({ length: 65 })
   password: string;
-
-  @Column({ unique: true, length: 40 })
-  token: string;
 
   @OneToMany(() => UserReading, (reading) => reading.user)
   userReading: UserReading[];

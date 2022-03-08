@@ -7,17 +7,21 @@ import * as uuid from 'uuid';
 import { User } from '../entity/user.entity';
 import { UserClass } from '../service/user.service';
 import { CheckValidData } from './signup.check.valid.data';
+import { Token } from 'src/entity/token.entity';
 
 @Injectable()
 export class SignupService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+
+    @InjectRepository(Token)
+    private tokenRepository: Repository<Token>,
   ) {}
 
-  async SignupServiceUser(userData): Promise<string> {
-    const userClass = await new UserClass(this.userRepository);
+  userClass = new UserClass(this.userRepository, this.tokenRepository);
 
+  async SignupServiceUser(userData): Promise<string> {
     userData.name = userData.name.trim();
     userData.email = userData.email.trim();
     userData.password = userData.password.trim();
@@ -25,9 +29,9 @@ export class SignupService {
     const MessageFromCheckValidData = await CheckValidData(userData);
     if (MessageFromCheckValidData != 'ok') return MessageFromCheckValidData;
 
-    if (await userClass.CheckNameUserExist(userData)) {
+    if (await this.userClass.CheckNameUserExist(userData)) {
       return 'Данное имя уже занято';
-    } else if (await userClass.CheckEmailUserExist(userData)) {
+    } else if (await this.userClass.CheckEmailUserExist(userData)) {
       return 'Данная почта принадлежит другому пользователю';
     } else {
       const saltOrRounds = 7;
@@ -37,10 +41,17 @@ export class SignupService {
         name: userData.name,
         email: userData.email,
         password: hashPassword,
-        token: await uuid.v4(),
       });
 
       await newUser.save();
+
+      const token = this.tokenRepository.create({
+        user: newUser,
+        token: await uuid.v4(),
+      });
+
+      await token.save();
+
       return 'ok';
     }
   }

@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, getRepository } from 'typeorm';
+import { Repository, getRepository, getConnection } from 'typeorm';
 
 import { BookClass } from './service/book.service';
 
 import { User } from './entity/user.entity';
 import { Book } from './entity/book.entity';
 import { UserReading } from './entity/user.reading.entity';
+import { Token } from './entity/token.entity';
 
 @Injectable()
 export class AppService {
@@ -17,6 +18,9 @@ export class AppService {
     @InjectRepository(Book)
     private bookRepository: Repository<Book>,
 
+    @InjectRepository(Token)
+    private tokenRepository: Repository<Token>,
+
     @InjectRepository(UserReading)
     private userReadingRepository: Repository<UserReading>,
   ) {}
@@ -24,11 +28,11 @@ export class AppService {
   async checkValidToken(token) {
     let exist: boolean;
 
-    const checkData = await this.userRepository.findOne({
+    const tokenEntity = await this.tokenRepository.findOne({
       where: { token: token },
     });
 
-    checkData ? (exist = true) : (exist = false);
+    tokenEntity ? (exist = true) : (exist = false);
 
     return exist;
   }
@@ -41,10 +45,18 @@ export class AppService {
   }
 
   async getUserReadingBooks(token: number): Promise<object[]> {
-    const user = await this.userRepository.findOne({ where: { token: token } });
+    const tokenEntity = await getConnection()
+    .getRepository(Token)
+    .createQueryBuilder("token")
+    .leftJoinAndSelect("token.user", "user")
+    .where('token.token = :token', { token: token })
+    .getOne();
+
+    const user = tokenEntity.user   
+    
     const idReadingBooks = await this.userReadingRepository.find({
       where: { user: user },
-    });
+    });    
 
     if (idReadingBooks.length == 0) return [];
 

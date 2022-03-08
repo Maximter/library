@@ -2,11 +2,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../entity/user.entity';
 import * as bcrypt from 'bcrypt';
+import { Token } from 'src/entity/token.entity';
 
 export class UserClass {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+
+    @InjectRepository(Token)
+    private tokenRepository: Repository<Token>,
   ) {}
 
   async CheckNameUserExist(userData) {
@@ -38,16 +42,20 @@ export class UserClass {
   async CheckLogInUserData(userData) {
     let exist: boolean;
 
-    const checkData = await this.userRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { email: userData.email },
     });
 
-    checkData ? (exist = true) : (exist = false);
+    user ? (exist = true) : (exist = false);
 
-    if (exist && !(await bcrypt.compare(userData.password, checkData.password)))
+    if (exist && !(await bcrypt.compare(userData.password, user.password)))
       exist = false;
 
-    if (exist) return { token: checkData.token };
+    const token = await this.tokenRepository.findOne({
+      where: { user: user },
+    });   
+
+    if (exist) return { token: token.token };
     else return false;
   }
 

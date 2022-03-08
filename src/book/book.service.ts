@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, getRepository, QueryBuilder, getConnection } from 'typeorm';
 
 import { BookClass } from '../service/book.service';
 
 import { User } from 'src/entity/user.entity';
 import { Book } from '../entity/book.entity';
 import { UserReading } from 'src/entity/user.reading.entity';
+import { Token } from 'src/entity/token.entity';
 
 @Injectable()
 export class BookService {
@@ -16,6 +17,9 @@ export class BookService {
 
     @InjectRepository(Book)
     private bookRepository: Repository<Book>,
+
+    @InjectRepository(Token)
+    private tokenRepository: Repository<Token>,
 
     @InjectRepository(UserReading)
     private userReadingRepository: Repository<UserReading>,
@@ -50,13 +54,20 @@ export class BookService {
   async addBookToReadingToUser(id_book, token): Promise<number> {
     if (!token) return 0;
 
-    const user = await this.userRepository.findOne({ where: { token: token } });
+    const tokenEntity = await getConnection()
+      .getRepository(Token)
+      .createQueryBuilder("token")
+      .leftJoinAndSelect("token.user", "user")
+      .where('token.token = :token', { token: token })
+      .getOne();
+
+    const user = tokenEntity.user      
 
     const existReadingBook = await this.userReadingRepository.findOne({
       where: { user: user, id_book: id_book },
     });
 
-    if (existReadingBook) return 0;
+    if (existReadingBook || !user) return 0;
 
     const newReadingBook = await this.userReadingRepository.create({
       user: user,
@@ -70,7 +81,14 @@ export class BookService {
   async deleteBook(id_book, token): Promise<number> {
     if (!token) return 0;
 
-    const user = await this.userRepository.findOne({ where: { token: token } });
+    const tokenEntity = await getConnection()
+      .getRepository(Token)
+      .createQueryBuilder("token")
+      .leftJoinAndSelect("token.user", "user")
+      .where('token.token = :token', { token: token })
+      .getOne();
+
+    const user = tokenEntity.user   
 
     const existReadingBook = await this.userReadingRepository.findOne({
       where: { user: user, id_book: id_book },

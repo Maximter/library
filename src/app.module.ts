@@ -12,11 +12,12 @@ import { Book } from './entity/book.entity';
 import { BookModule } from './book/book.module';
 import { AdminModule } from './admin/admin.module';
 import { UserReading } from './entity/user.reading.entity';
+import { Token } from './entity/token.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
-    TypeOrmModule.forFeature([User, Book, UserReading]),
+    TypeOrmModule.forFeature([User, Token, Book, UserReading]),
     SignupModule,
     LoginModule,
     ProfileModule,

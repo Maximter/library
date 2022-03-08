@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, getRepository } from 'typeorm';
+import { Repository, getRepository, getConnection } from 'typeorm';
 import * as fs from 'fs';
 
 import { User } from '../entity/user.entity';
 import { Book } from '../entity/book.entity';
 import { UserReading } from 'src/entity/user.reading.entity';
+import { Token } from 'src/entity/token.entity';
 
 @Injectable()
 export class ProfileService {
@@ -21,7 +22,14 @@ export class ProfileService {
   ) {}
 
   async getUserData(token: string) {
-    const user = await this.userRepository.findOne({ where: { token: token } });
+    const tokenEntity = await getConnection()
+    .getRepository(Token)
+    .createQueryBuilder("token")
+    .leftJoinAndSelect("token.user", "user")
+    .where('token.token = :token', { token: token })
+    .getOne();
+
+    const user = tokenEntity.user   
 
     return user;
   }
