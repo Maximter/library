@@ -11,7 +11,7 @@ import { UserReading } from 'src/entity/user.reading.entity';
 import { Token } from 'src/entity/token.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Token , Book, UserReading])],
+  imports: [TypeOrmModule.forFeature([User, Token, Book, UserReading])],
   controllers: [ProfileController],
   providers: [ProfileService, AppService],
 })

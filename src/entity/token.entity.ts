@@ -4,7 +4,7 @@ import {
   PrimaryGeneratedColumn,
   BaseEntity,
   OneToOne,
-  JoinColumn
+  JoinColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 
@@ -18,5 +18,5 @@ export class Token extends BaseEntity {
   user: User;
 
   @Column({ unique: true, length: 40 })
-  token: string; 
+  token: string;
 }

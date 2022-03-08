@@ -23,13 +23,13 @@ export class ProfileService {
 
   async getUserData(token: string) {
     const tokenEntity = await getConnection()
-    .getRepository(Token)
-    .createQueryBuilder("token")
-    .leftJoinAndSelect("token.user", "user")
-    .where('token.token = :token', { token: token })
-    .getOne();
+      .getRepository(Token)
+      .createQueryBuilder('token')
+      .leftJoinAndSelect('token.user', 'user')
+      .where('token.token = :token', { token: token })
+      .getOne();
 
-    const user = tokenEntity.user   
+    const user = tokenEntity.user;
 
     return user;
   }
@@ -77,7 +77,7 @@ export class ProfileService {
   async createIdBookAndRename(multerBookName: string): Promise<number> {
     const id: number = Math.round(Math.random() * 100000000);
 
-    await fs.rename(
+    fs.rename(
       `public/books/rowBook/${multerBookName}`,
       `public/books/${id}.pdf`,
       function (err) {
@@ -98,6 +98,6 @@ export class ProfileService {
       status: 'Checking...',
     });
 
-    await newBook.save();
+    newBook.save();
   }
 }

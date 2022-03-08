@@ -9,7 +9,7 @@ import { User } from 'src/entity/user.entity';
 import { Token } from 'src/entity/token.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Token , Book, UserReading])],
+  imports: [TypeOrmModule.forFeature([User, Token, Book, UserReading])],
   controllers: [BookController],
   providers: [BookService],
 })

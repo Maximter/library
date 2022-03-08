@@ -53,7 +53,7 @@ export class UserClass {
 
     const token = await this.tokenRepository.findOne({
       where: { user: user },
-    });   
+    });
 
     if (exist) return { token: token.token };
     else return false;

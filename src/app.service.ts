@@ -46,17 +46,17 @@ export class AppService {
 
   async getUserReadingBooks(token: number): Promise<object[]> {
     const tokenEntity = await getConnection()
-    .getRepository(Token)
-    .createQueryBuilder("token")
-    .leftJoinAndSelect("token.user", "user")
-    .where('token.token = :token', { token: token })
-    .getOne();
+      .getRepository(Token)
+      .createQueryBuilder('token')
+      .leftJoinAndSelect('token.user', 'user')
+      .where('token.token = :token', { token: token })
+      .getOne();
 
-    const user = tokenEntity.user   
-    
+    const user = tokenEntity.user;
+
     const idReadingBooks = await this.userReadingRepository.find({
       where: { user: user },
-    });    
+    });
 
     if (idReadingBooks.length == 0) return [];
 

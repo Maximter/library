@@ -22,11 +22,8 @@ export class BookController {
   async openBook(@Param() params, @Req() req, @Res() res: Response) {
     params.id = params.id.slice(1);
     if (req.cookies['token'] != 'qqqqqq') {
-      await this.bookService.addReadToBook(params.id);
-      await this.bookService.addBookToReadingToUser(
-        params.id,
-        req.cookies['token'],
-      );
+      this.bookService.addReadToBook(params.id);
+      this.bookService.addBookToReadingToUser(params.id, req.cookies['token']);
     }
     return res.sendFile(`D:/projects/library-2/public/books/${params.id}.pdf`);
   }
@@ -43,7 +40,7 @@ export class BookController {
   @Post(':id')
   async deleteBook(@Param() params, @Req() req, @Res() res: Response) {
     params.id = params.id.slice(1);
-    await this.bookService.deleteBook(params.id, req.cookies['token']);    
+    await this.bookService.deleteBook(params.id, req.cookies['token']);
     return res.redirect(req.headers.referer);
   }
 }

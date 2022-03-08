@@ -39,7 +39,7 @@ export class SignupService {
       const saltOrRounds = 7;
       const hashPassword = await bcrypt.hash(userData.password, saltOrRounds);
 
-      await getManager().transaction(async transactionalEntityManager => {
+      await getManager().transaction(async (transactionalEntityManager) => {
         const newUser = this.userRepository.create({
           name: userData.name,
           email: userData.email,
@@ -51,8 +51,8 @@ export class SignupService {
           user: newUser,
           token: await uuid.v4(),
         });
-        await transactionalEntityManager.save(token);
-      })
+        transactionalEntityManager.save(token);
+      });
 
       return 'ok';
     }

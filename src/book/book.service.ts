@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, getRepository, QueryBuilder, getConnection } from 'typeorm';
+import {
+  Repository,
+  getRepository,
+  QueryBuilder,
+  getConnection,
+} from 'typeorm';
 
 import { BookClass } from '../service/book.service';
 
@@ -56,12 +61,12 @@ export class BookService {
 
     const tokenEntity = await getConnection()
       .getRepository(Token)
-      .createQueryBuilder("token")
-      .leftJoinAndSelect("token.user", "user")
+      .createQueryBuilder('token')
+      .leftJoinAndSelect('token.user', 'user')
       .where('token.token = :token', { token: token })
       .getOne();
 
-    const user = tokenEntity.user      
+    const user = tokenEntity.user;
 
     const existReadingBook = await this.userReadingRepository.findOne({
       where: { user: user, id_book: id_book },
@@ -74,21 +79,21 @@ export class BookService {
       id_book: id_book,
     });
 
-    await newReadingBook.save();
+    newReadingBook.save();
     return 0;
   }
 
   async deleteBook(id_book, token): Promise<number> {
-    if (!token) return 0;
+    if (!token || !id_book) return 0;
 
     const tokenEntity = await getConnection()
       .getRepository(Token)
-      .createQueryBuilder("token")
-      .leftJoinAndSelect("token.user", "user")
+      .createQueryBuilder('token')
+      .leftJoinAndSelect('token.user', 'user')
       .where('token.token = :token', { token: token })
       .getOne();
 
-    const user = tokenEntity.user   
+    const user = tokenEntity.user;
 
     const existReadingBook = await this.userReadingRepository.findOne({
       where: { user: user, id_book: id_book },

@@ -8,7 +8,7 @@ import { Admin } from '../entity/admin.entity';
 import { Token } from 'src/entity/token.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Admin, Token])],  
+  imports: [TypeOrmModule.forFeature([User, Admin, Token])],
   controllers: [LoginController],
   providers: [LoginService],
 })

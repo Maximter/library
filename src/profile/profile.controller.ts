@@ -44,11 +44,9 @@ export class ProfileController {
     );
     body.id_user = userData.id_user;
     body.name_author = body.authorName;
-    body.id_book = await this.profileService.createIdBookAndRename(
-      req.file.filename,
-    );
+    body.id_book = this.profileService.createIdBookAndRename(req.file.filename);
 
-    await this.profileService.saveBookInDB(body);
+    this.profileService.saveBookInDB(body);
 
     return res.redirect('profile');
   }
