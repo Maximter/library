@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Connection, getManager } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import * as uuid from 'uuid';
 
@@ -12,6 +12,8 @@ import { Token } from 'src/entity/token.entity';
 @Injectable()
 export class SignupService {
   constructor(
+    private connection: Connection,
+
     @InjectRepository(User)
     private userRepository: Repository<User>,
 
@@ -30,27 +32,27 @@ export class SignupService {
     if (MessageFromCheckValidData != 'ok') return MessageFromCheckValidData;
 
     if (await this.userClass.CheckNameUserExist(userData)) {
-      return 'Данное имя уже занято';
+      return 'This name is already occupied';
     } else if (await this.userClass.CheckEmailUserExist(userData)) {
-      return 'Данная почта принадлежит другому пользователю';
+      return 'This mail belongs to another user';
     } else {
       const saltOrRounds = 7;
       const hashPassword = await bcrypt.hash(userData.password, saltOrRounds);
 
-      const newUser = this.userRepository.create({
-        name: userData.name,
-        email: userData.email,
-        password: hashPassword,
-      });
+      await getManager().transaction(async transactionalEntityManager => {
+        const newUser = this.userRepository.create({
+          name: userData.name,
+          email: userData.email,
+          password: hashPassword,
+        });
+        await transactionalEntityManager.save(newUser);
 
-      await newUser.save();
-
-      const token = this.tokenRepository.create({
-        user: newUser,
-        token: await uuid.v4(),
-      });
-
-      await token.save();
+        const token = this.tokenRepository.create({
+          user: newUser,
+          token: await uuid.v4(),
+        });
+        await transactionalEntityManager.save(token);
+      })
 
       return 'ok';
     }
